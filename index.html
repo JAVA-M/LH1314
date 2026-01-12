@@ -9,7 +9,7 @@
         :root {
             --accent-cyan: #22d3ee;
             --soft-blue: #bae6fd;
-            --glass: rgba(255, 255, 255, 0.18);
+            --glass: rgba(255, 255, 255, 0.2);
         }
 
         * {
@@ -20,7 +20,6 @@
         }
 
         body {
-            /* 提亮背景：使用深蓝到紫深的径向渐变，更有层次感 */
             background: radial-gradient(circle at center, #1e293b 0%, #020617 100%);
             height: 100vh;
             overflow: hidden;
@@ -64,7 +63,6 @@
             to { transform: rotate(360deg); }
         }
 
-        /* Canvas背景层 */
         #night-sky {
             position: fixed;
             top: 0;
@@ -74,14 +72,13 @@
             z-index: -1;
         }
 
-        /* 玻璃卡片 */
         .glass-card {
             width: 88%;
             max-width: 380px;
             background: var(--glass);
             backdrop-filter: blur(25px);
             -webkit-backdrop-filter: blur(25px);
-            border: 1px solid rgba(255, 255, 255, 0.25);
+            border: 1px solid rgba(255, 255, 255, 0.3);
             border-radius: 40px;
             padding: 45px 25px;
             text-align: center;
@@ -170,14 +167,15 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            background: rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.15);
             border-radius: 50px;
-            border: 1px solid rgba(34, 211, 238, 0.3);
+            border: 1px solid rgba(34, 211, 238, 0.4);
         }
 
         #praise-text {
             font-size: 0.95rem;
-            color: var(--soft-blue);
+            color: #fff;
+            transition: opacity 0.5s;
         }
 
         @keyframes pulse {
@@ -258,22 +256,24 @@
             }
         }
 
-        // 3. Canvas 增强流星雨特效
+        // 3. 优化版 Canvas 流星雨 (修复手机端过快问题)
         const canvas = document.getElementById('night-sky');
         const ctx = canvas.getContext('2d');
         let stars = [];
         let meteors = [];
+        let lastTime = Date.now();
 
         function initCanvas() {
             canvas.width = window.innerWidth;
             canvas.height = window.innerHeight;
-            // 初始化静态星星
+            stars = [];
             for(let i=0; i<100; i++) {
                 stars.push({
                     x: Math.random() * canvas.width,
                     y: Math.random() * canvas.height,
                     size: Math.random() * 1.5,
-                    opacity: Math.random()
+                    opacity: Math.random(),
+                    speed: Math.random() * 0.05
                 });
             }
         }
@@ -283,46 +283,69 @@
                 this.reset();
             }
             reset() {
-                this.x = Math.random() * canvas.width;
-                this.y = Math.random() * canvas.height * 0.4;
-                this.len = Math.random() * 80 + 50;
-                this.speed = Math.random() * 6 + 4;
-                this.opacity = 1;
+                this.x = Math.random() * canvas.width * 1.2 - (canvas.width * 0.2);
+                this.y = Math.random() * canvas.height * 0.5;
+                this.len = Math.random() * 60 + 40;
+                // 基础速度值
+                this.baseSpeed = Math.random() * 200 + 150; 
+                this.opacity = 0;
+                this.maxOpacity = Math.random() * 0.6 + 0.4;
+                this.phase = 'in'; // in, out
             }
             draw() {
-                ctx.strokeStyle = `rgba(34, 211, 238, ${this.opacity})`;
-                ctx.lineWidth = 2;
+                let gradient = ctx.createLinearGradient(this.x, this.y, this.x - this.len, this.y - (this.len * 0.5));
+                gradient.addColorStop(0, `rgba(34, 211, 238, ${this.opacity})`);
+                gradient.addColorStop(1, `rgba(34, 211, 238, 0)`);
+                
+                ctx.strokeStyle = gradient;
+                ctx.lineWidth = 1.5;
+                ctx.lineCap = 'round';
                 ctx.beginPath();
                 ctx.moveTo(this.x, this.y);
-                ctx.lineTo(this.x + this.len, this.y + (this.len * 0.6));
+                ctx.lineTo(this.x - this.len, this.y - (this.len * 0.5));
                 ctx.stroke();
             }
-            update() {
-                this.x += this.speed;
-                this.y += this.speed * 0.6;
-                this.opacity -= 0.01;
-                if (this.opacity <= 0 || this.x > canvas.width || this.y > canvas.height) {
+            update(dt) {
+                // 根据时间增量 dt 移动，dt 是秒
+                this.x += this.baseSpeed * dt;
+                this.y += (this.baseSpeed * 0.5) * dt;
+
+                if (this.phase === 'in') {
+                    this.opacity += dt * 2;
+                    if (this.opacity >= this.maxOpacity) this.phase = 'out';
+                } else {
+                    this.opacity -= dt * 0.8;
+                }
+
+                if (this.opacity <= 0 || this.x > canvas.width + this.len) {
                     this.reset();
                 }
             }
         }
 
-        for(let i=0; i<5; i++) meteors.push(new Meteor());
+        // 减少流星数量，让手机端看起来更清爽
+        const meteorCount = window.innerWidth < 500 ? 3 : 5;
+        for(let i=0; i<meteorCount; i++) meteors.push(new Meteor());
 
         function animate() {
+            const now = Date.now();
+            const dt = (now - lastTime) / 1000; // 换算成秒
+            lastTime = now;
+
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             
-            // 画背景星星
+            // 背景星星微弱闪烁
             stars.forEach(s => {
-                ctx.fillStyle = `rgba(255,255,255,${s.opacity})`;
+                s.opacity += Math.sin(now * 0.001) * 0.005;
+                ctx.fillStyle = `rgba(255,255,255,${Math.abs(s.opacity)})`;
                 ctx.beginPath();
                 ctx.arc(s.x, s.y, s.size, 0, Math.PI*2);
                 ctx.fill();
             });
 
-            // 画流星
+            // 更新和画流星
             meteors.forEach(m => {
-                m.update();
+                m.update(dt);
                 m.draw();
             });
 

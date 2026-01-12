@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>李小满 ❤️ 满小李</title>
+    <link href="https://fonts.googleapis.com/css2?family=ZCOOL+XiaoWei&family=Noto+Sans+SC:wght@300;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-deep: #0f172a;
+            --soft-blue: #bae6fd;
+            --accent-cyan: #22d3ee;
+            --text-white: #f8fafc;
+            --glass-white: rgba(255, 255, 255, 0.15);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background: #020617; /* 深色星空底色更显浪漫 */
+            height: 100vh;
+            overflow: hidden;
+            font-family: 'Noto+Sans+SC', sans-serif;
+            color: var(--text-white);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* 动态流动背景 */
+        .background-animate {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 50% 50%, #1e293b 0%, #020617 100%);
+            z-index: -2;
+        }
+
+        /* 玻璃质感容器 */
+        .glass-card {
+            width: 85%;
+            max-width: 380px;
+            background: var(--glass-white);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 40px;
+            padding: 40px 25px;
+            text-align: center;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            animation: cardFloat 2s ease-out;
+        }
+
+        /* 名字设计 */
+        .couple-names {
+            font-family: 'ZCOOL XiaoWei', serif;
+            font-size: 1.8rem;
+            margin-bottom: 30px;
+            letter-spacing: 2px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .heart {
+            color: #38bdf8;
+            filter: drop-shadow(0 0 8px #38bdf8);
+            animation: pulse 1.5s infinite;
+        }
+
+        /* 计时器设计 */
+        .timer-container {
+            margin: 30px 0;
+        }
+
+        .timer-label {
+            font-size: 0.8rem;
+            color: var(--soft-blue);
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            margin-bottom: 15px;
+            opacity: 0.8;
+        }
+
+        #countdown {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+        }
+
+        .time-item {
+            display: flex;
+            flex-direction: column;
+            background: rgba(255, 255, 255, 0.05);
+            padding: 10px 5px;
+            border-radius: 15px;
+        }
+
+        .time-num {
+            font-size: 1.4rem;
+            font-weight: 500;
+            color: var(--accent-cyan);
+            text-shadow: 0 0 10px rgba(34, 211, 238, 0.5);
+        }
+
+        .time-unit {
+            font-size: 0.6rem;
+            margin-top: 5px;
+            color: var(--soft-blue);
+        }
+
+        /* 语录区 */
+        .love-note {
+            margin-top: 35px;
+            text-align: left;
+            border-left: 2px solid var(--accent-cyan);
+            padding-left: 15px;
+        }
+
+        .note-title {
+            font-size: 0.75rem;
+            color: var(--accent-cyan);
+            margin-bottom: 8px;
+        }
+
+        .note-content {
+            font-family: 'ZCOOL XiaoWei', serif;
+            font-size: 1rem;
+            line-height: 1.6;
+            color: #e2e8f0;
+        }
+
+        /* 动态夸夸墙 */
+        .praise-box {
+            margin-top: 30px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(56, 189, 248, 0.1);
+            border-radius: 50px;
+            border: 1px dashed rgba(56, 189, 248, 0.3);
+        }
+
+        #praise-text {
+            font-size: 0.9rem;
+            color: var(--soft-blue);
+            transition: all 0.8s ease;
+        }
+
+        /* 动画 */
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+
+        @keyframes cardFloat {
+            from { opacity: 0; transform: translateY(40px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* 背景流星效果 */
+        .shooting-star {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: white;
+            border-radius: 50%;
+            box-shadow: 0 0 10px white;
+            animation: shoot 3s linear infinite;
+        }
+
+        @keyframes shoot {
+            0% { transform: translateX(0) translateY(0); opacity: 1; }
+            100% { transform: translateX(300px) translateY(300px); opacity: 0; }
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="background-animate"></div>
+
+    <div class="glass-card">
+        <div class="couple-names">
+            <span>李小满</span>
+            <span class="heart">💙</span>
+            <span>满小李</span>
+        </div>
+
+        <div class="timer-container">
+            <div class="timer-label">时光流转 每一秒都是你</div>
+            <div id="countdown">
+                <div class="time-item"><span class="time-num" id="d">-</span><span class="time-unit">DAYS</span></div>
+                <div class="time-item"><span class="time-num" id="h">-</span><span class="time-unit">HOURS</span></div>
+                <div class="time-item"><span class="time-num" id="m">-</span><span class="time-unit">MINS</span></div>
+                <div class="time-item"><span class="time-num" id="s">-</span><span class="time-unit">SECS</span></div>
+            </div>
+        </div>
+
+        <div class="love-note">
+            <div class="note-title">给满小李的悄悄话</div>
+            <div class="note-content">
+                你是李小满生命里最温柔的奇迹。<br>
+                从2025年的那个夏天开始，<br>
+                我的世界从此有了姓名。
+            </div>
+        </div>
+
+        <div class="praise-box">
+            <span id="praise-text">遇见你，是所有好运的开始 ✨</span>
+        </div>
+    </div>
+
+    <script>
+        // 设置在一起的时间点 (2025年5月31日 21:50:00)
+        // JS Date 月份从 0 开始计数，所以 5 月对应数字 4
+        const startTime = new Date(2025, 4, 31, 21, 50, 0).getTime();
+
+        function updateTimer() {
+            const now = new Date().getTime();
+            const diff = now - startTime;
+
+            const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const mins = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+            const secs = Math.floor((diff % (1000 * 60)) / 1000);
+
+            document.getElementById('d').innerText = days;
+            document.getElementById('h').innerText = hours;
+            document.getElementById('m').innerText = mins;
+            document.getElementById('s').innerText = secs;
+        }
+
+        setInterval(updateTimer, 1000);
+        updateTimer();
+
+        // 夸夸墙内容
+        const praises = [
+            "满小李笑起来眼里有星星 ✨",
+            "是全世界最值得被宠爱的宝贝",
+            "哪怕是发呆的样子都超迷人",
+            "李小满的余生请多多指教 💍",
+            "你是雾霾蓝里最清澈的那抹亮色",
+            "今日份的满小李也是100分好评",
+            "想牵着你的手走过所有四季 🍂"
+        ];
+        
+        let pIndex = 0;
+        function changePraise() {
+            const el = document.getElementById('praise-text');
+            el.style.opacity = 0;
+            el.style.transform = "translateY(10px)";
+            
+            setTimeout(() => {
+                el.innerText = praises[pIndex];
+                el.style.opacity = 1;
+                el.style.transform = "translateY(0)";
+                pIndex = (pIndex + 1) % praises.length;
+            }, 800);
+        }
+        setInterval(changePraise, 3500);
+
+        // 创建背景流星
+        function createStar() {
+            const star = document.createElement('div');
+            star.className = 'shooting-star';
+            star.style.left = Math.random() * window.innerWidth + 'px';
+            star.style.top = Math.random() * window.innerHeight / 2 + 'px';
+            star.style.animationDuration = (Math.random() * 2 + 2) + 's';
+            document.body.appendChild(star);
+            setTimeout(() => star.remove(), 3000);
+        }
+        setInterval(createStar, 1000);
+
+        // 点击全屏特效
+        document.addEventListener('touchstart', (e) => {
+            let heart = document.createElement('div');
+            heart.innerHTML = '💙';
+            heart.style.position = 'fixed';
+            heart.style.left = e.touches[0].clientX + 'px';
+            heart.style.top = e.touches[0].clientY + 'px';
+            heart.style.fontSize = '24px';
+            heart.style.pointerEvents = 'none';
+            heart.style.zIndex = '1000';
+            heart.style.animation = 'pulse 1s forwards';
+            document.body.appendChild(heart);
+            setTimeout(() => heart.remove(), 1000);
+        });
+    </script>
+</body>
+</html>

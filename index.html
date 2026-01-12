@@ -5,14 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>李小满 ❤️ 满小李</title>
     <link href="https://fonts.googleapis.com/css2?family=ZCOOL+XiaoWei&family=Noto+Sans+SC:wght@300;500&display=swap" rel="stylesheet">
-    <!-- trigger rebuild -->
     <style>
         :root {
-            --bg-deep: #0f172a;
-            --soft-blue: #bae6fd;
             --accent-cyan: #22d3ee;
-            --text-white: #f8fafc;
-            --glass-white: rgba(255, 255, 255, 0.15);
+            --soft-blue: #bae6fd;
+            --glass: rgba(255, 255, 255, 0.18);
         }
 
         * {
@@ -23,173 +20,185 @@
         }
 
         body {
-            background: #020617; /* 深色星空底色更显浪漫 */
+            /* 提亮背景：使用深蓝到紫深的径向渐变，更有层次感 */
+            background: radial-gradient(circle at center, #1e293b 0%, #020617 100%);
             height: 100vh;
             overflow: hidden;
-            font-family: 'Noto+Sans+SC', sans-serif;
-            color: var(--text-white);
+            font-family: 'Noto Sans SC', sans-serif;
+            color: #fff;
             display: flex;
             justify-content: center;
             align-items: center;
         }
 
-        /* 动态流动背景 */
-        .background-animate {
+        /* 音乐唱片控制 */
+        .music-ctrl {
+            position: fixed;
+            top: 25px;
+            right: 25px;
+            z-index: 1000;
+            width: 45px;
+            height: 45px;
+            cursor: pointer;
+        }
+
+        .disc {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid var(--soft-blue);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 22px;
+            box-shadow: 0 0 15px rgba(34, 211, 238, 0.4);
+        }
+
+        .disc.rotating {
+            animation: rotateDisc 5s linear infinite;
+        }
+
+        @keyframes rotateDisc {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        /* Canvas背景层 */
+        #night-sky {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: radial-gradient(circle at 50% 50%, #1e293b 0%, #020617 100%);
-            z-index: -2;
+            z-index: -1;
         }
 
-        /* 玻璃质感容器 */
+        /* 玻璃卡片 */
         .glass-card {
-            width: 85%;
+            width: 88%;
             max-width: 380px;
-            background: var(--glass-white);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
+            background: var(--glass);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            border: 1px solid rgba(255, 255, 255, 0.25);
             border-radius: 40px;
-            padding: 40px 25px;
+            padding: 45px 25px;
             text-align: center;
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
-            animation: cardFloat 2s ease-out;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
+            animation: fadeIn 1.5s ease;
         }
 
-        /* 名字设计 */
         .couple-names {
             font-family: 'ZCOOL XiaoWei', serif;
             font-size: 1.8rem;
-            margin-bottom: 30px;
-            letter-spacing: 2px;
+            margin-bottom: 25px;
             display: flex;
             justify-content: center;
             align-items: center;
-            gap: 12px;
+            gap: 15px;
+            text-shadow: 0 0 10px rgba(255,255,255,0.3);
         }
 
         .heart {
-            color: #38bdf8;
-            filter: drop-shadow(0 0 8px #38bdf8);
+            color: var(--accent-cyan);
+            filter: drop-shadow(0 0 8px var(--accent-cyan));
             animation: pulse 1.5s infinite;
         }
 
-        /* 计时器设计 */
-        .timer-container {
-            margin: 30px 0;
-        }
-
         .timer-label {
-            font-size: 0.8rem;
+            font-size: 0.85rem;
             color: var(--soft-blue);
-            text-transform: uppercase;
-            letter-spacing: 3px;
-            margin-bottom: 15px;
-            opacity: 0.8;
+            letter-spacing: 4px;
+            margin-bottom: 20px;
+            opacity: 0.9;
         }
 
         #countdown {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
             gap: 10px;
+            margin-bottom: 35px;
         }
 
         .time-item {
-            display: flex;
-            flex-direction: column;
-            background: rgba(255, 255, 255, 0.05);
-            padding: 10px 5px;
-            border-radius: 15px;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 12px 5px;
+            border-radius: 18px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
         }
 
         .time-num {
-            font-size: 1.4rem;
-            font-weight: 500;
+            font-size: 1.35rem;
+            font-weight: 600;
             color: var(--accent-cyan);
-            text-shadow: 0 0 10px rgba(34, 211, 238, 0.5);
+            text-shadow: 0 0 12px rgba(34, 211, 238, 0.6);
         }
 
         .time-unit {
-            font-size: 0.6rem;
-            margin-top: 5px;
+            font-size: 0.65rem;
             color: var(--soft-blue);
+            margin-top: 4px;
+            display: block;
         }
 
-        /* 语录区 */
         .love-note {
-            margin-top: 35px;
             text-align: left;
-            border-left: 2px solid var(--accent-cyan);
+            border-left: 3px solid var(--accent-cyan);
             padding-left: 15px;
+            margin-bottom: 30px;
+            background: rgba(255,255,255,0.05);
+            padding: 15px;
+            border-radius: 0 15px 15px 0;
         }
 
         .note-title {
-            font-size: 0.75rem;
+            font-size: 0.8rem;
             color: var(--accent-cyan);
             margin-bottom: 8px;
+            font-weight: bold;
         }
 
         .note-content {
             font-family: 'ZCOOL XiaoWei', serif;
-            font-size: 1rem;
+            font-size: 1.05rem;
             line-height: 1.6;
-            color: #e2e8f0;
         }
 
-        /* 动态夸夸墙 */
         .praise-box {
-            margin-top: 30px;
-            height: 50px;
+            height: 54px;
             display: flex;
             align-items: center;
             justify-content: center;
-            background: rgba(56, 189, 248, 0.1);
+            background: rgba(255, 255, 255, 0.1);
             border-radius: 50px;
-            border: 1px dashed rgba(56, 189, 248, 0.3);
+            border: 1px solid rgba(34, 211, 238, 0.3);
         }
 
         #praise-text {
-            font-size: 0.9rem;
+            font-size: 0.95rem;
             color: var(--soft-blue);
-            transition: all 0.8s ease;
         }
 
-        /* 动画 */
         @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.1); }
-            100% { transform: scale(1); }
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.15); }
         }
 
-        @keyframes cardFloat {
-            from { opacity: 0; transform: translateY(40px); }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
             to { opacity: 1; transform: translateY(0); }
         }
-
-        /* 背景流星效果 */
-        .shooting-star {
-            position: absolute;
-            width: 2px;
-            height: 2px;
-            background: white;
-            border-radius: 50%;
-            box-shadow: 0 0 10px white;
-            animation: shoot 3s linear infinite;
-        }
-
-        @keyframes shoot {
-            0% { transform: translateX(0) translateY(0); opacity: 1; }
-            100% { transform: translateX(300px) translateY(300px); opacity: 0; }
-        }
-
     </style>
 </head>
 <body>
 
-    <div class="background-animate"></div>
+    <div class="music-ctrl" onclick="toggleMusic()">
+        <div class="disc" id="disc">🎵</div>
+    </div>
+    <audio id="audio" src="https://api.uomg.com/api/rand.music?sort=热歌榜&format=mp3" loop></audio>
+
+    <canvas id="night-sky"></canvas>
 
     <div class="glass-card">
         <div class="couple-names">
@@ -199,17 +208,17 @@
         </div>
 
         <div class="timer-container">
-            <div class="timer-label">时光流转 每一秒都是你</div>
+            <div class="timer-label">时光流转 · 每一秒都是你</div>
             <div id="countdown">
-                <div class="time-item"><span class="time-num" id="d">-</span><span class="time-unit">DAYS</span></div>
-                <div class="time-item"><span class="time-num" id="h">-</span><span class="time-unit">HOURS</span></div>
-                <div class="time-item"><span class="time-num" id="m">-</span><span class="time-unit">MINS</span></div>
-                <div class="time-item"><span class="time-num" id="s">-</span><span class="time-unit">SECS</span></div>
+                <div class="time-item"><span class="time-num" id="d">-</span><span class="time-unit">天</span></div>
+                <div class="time-item"><span class="time-num" id="h">-</span><span class="time-unit">时</span></div>
+                <div class="time-item"><span class="time-num" id="m">-</span><span class="time-unit">分</span></div>
+                <div class="time-item"><span class="time-num" id="s">-</span><span class="time-unit">秒</span></div>
             </div>
         </div>
 
         <div class="love-note">
-            <div class="note-title">给满小李的悄悄话</div>
+            <div class="note-title">给满小李：</div>
             <div class="note-content">
                 你是李小满生命里最温柔的奇迹。<br>
                 从2025年的那个夏天开始，<br>
@@ -223,80 +232,126 @@
     </div>
 
     <script>
-        // 设置在一起的时间点 (2025年5月31日 21:50:00)
-        // JS Date 月份从 0 开始计数，所以 5 月对应数字 4
+        // 1. 计时逻辑 (2025年5月31日 21:50:00)
         const startTime = new Date(2025, 4, 31, 21, 50, 0).getTime();
-
         function updateTimer() {
             const now = new Date().getTime();
             const diff = now - startTime;
-
-            const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-            const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            const mins = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-            const secs = Math.floor((diff % (1000 * 60)) / 1000);
-
-            document.getElementById('d').innerText = days;
-            document.getElementById('h').innerText = hours;
-            document.getElementById('m').innerText = mins;
-            document.getElementById('s').innerText = secs;
+            document.getElementById('d').innerText = Math.floor(diff / (1000 * 60 * 60 * 24));
+            document.getElementById('h').innerText = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            document.getElementById('m').innerText = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+            document.getElementById('s').innerText = Math.floor((diff % (1000 * 60)) / 1000);
         }
-
         setInterval(updateTimer, 1000);
         updateTimer();
 
-        // 夸夸墙内容
+        // 2. 音乐控制
+        const audio = document.getElementById('audio');
+        const disc = document.getElementById('disc');
+        function toggleMusic() {
+            if (audio.paused) {
+                audio.play();
+                disc.classList.add('rotating');
+            } else {
+                audio.pause();
+                disc.classList.remove('rotating');
+            }
+        }
+
+        // 3. Canvas 增强流星雨特效
+        const canvas = document.getElementById('night-sky');
+        const ctx = canvas.getContext('2d');
+        let stars = [];
+        let meteors = [];
+
+        function initCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            // 初始化静态星星
+            for(let i=0; i<100; i++) {
+                stars.push({
+                    x: Math.random() * canvas.width,
+                    y: Math.random() * canvas.height,
+                    size: Math.random() * 1.5,
+                    opacity: Math.random()
+                });
+            }
+        }
+
+        class Meteor {
+            constructor() {
+                this.reset();
+            }
+            reset() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height * 0.4;
+                this.len = Math.random() * 80 + 50;
+                this.speed = Math.random() * 6 + 4;
+                this.opacity = 1;
+            }
+            draw() {
+                ctx.strokeStyle = `rgba(34, 211, 238, ${this.opacity})`;
+                ctx.lineWidth = 2;
+                ctx.beginPath();
+                ctx.moveTo(this.x, this.y);
+                ctx.lineTo(this.x + this.len, this.y + (this.len * 0.6));
+                ctx.stroke();
+            }
+            update() {
+                this.x += this.speed;
+                this.y += this.speed * 0.6;
+                this.opacity -= 0.01;
+                if (this.opacity <= 0 || this.x > canvas.width || this.y > canvas.height) {
+                    this.reset();
+                }
+            }
+        }
+
+        for(let i=0; i<5; i++) meteors.push(new Meteor());
+
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            // 画背景星星
+            stars.forEach(s => {
+                ctx.fillStyle = `rgba(255,255,255,${s.opacity})`;
+                ctx.beginPath();
+                ctx.arc(s.x, s.y, s.size, 0, Math.PI*2);
+                ctx.fill();
+            });
+
+            // 画流星
+            meteors.forEach(m => {
+                m.update();
+                m.draw();
+            });
+
+            requestAnimationFrame(animate);
+        }
+
+        window.addEventListener('resize', initCanvas);
+        initCanvas();
+        animate();
+
+        // 4. 夸夸内容
         const praises = [
             "满小李笑起来眼里有星星 ✨",
             "是全世界最值得被宠爱的宝贝",
-            "哪怕是发呆的样子都超迷人",
             "李小满的余生请多多指教 💍",
             "你是雾霾蓝里最清澈的那抹亮色",
-            "今日份的满小李也是100分好评",
-            "想牵着你的手走过所有四季 🍂"
+            "想牵着你的手走过所有四季 🍂",
+            "满小李是李小满的小骄傲 💙"
         ];
-        
         let pIndex = 0;
-        function changePraise() {
+        setInterval(() => {
             const el = document.getElementById('praise-text');
             el.style.opacity = 0;
-            el.style.transform = "translateY(10px)";
-            
             setTimeout(() => {
                 el.innerText = praises[pIndex];
                 el.style.opacity = 1;
-                el.style.transform = "translateY(0)";
                 pIndex = (pIndex + 1) % praises.length;
-            }, 800);
-        }
-        setInterval(changePraise, 3500);
-
-        // 创建背景流星
-        function createStar() {
-            const star = document.createElement('div');
-            star.className = 'shooting-star';
-            star.style.left = Math.random() * window.innerWidth + 'px';
-            star.style.top = Math.random() * window.innerHeight / 2 + 'px';
-            star.style.animationDuration = (Math.random() * 2 + 2) + 's';
-            document.body.appendChild(star);
-            setTimeout(() => star.remove(), 3000);
-        }
-        setInterval(createStar, 1000);
-
-        // 点击全屏特效
-        document.addEventListener('touchstart', (e) => {
-            let heart = document.createElement('div');
-            heart.innerHTML = '💙';
-            heart.style.position = 'fixed';
-            heart.style.left = e.touches[0].clientX + 'px';
-            heart.style.top = e.touches[0].clientY + 'px';
-            heart.style.fontSize = '24px';
-            heart.style.pointerEvents = 'none';
-            heart.style.zIndex = '1000';
-            heart.style.animation = 'pulse 1s forwards';
-            document.body.appendChild(heart);
-            setTimeout(() => heart.remove(), 1000);
-        });
+            }, 500);
+        }, 3500);
     </script>
 </body>
 </html>

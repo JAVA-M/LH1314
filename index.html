@@ -1,10 +1,12 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>李小满 ❤️ 满小李</title>
-    <link href="https://fonts.googleapis.com/css2?family=ZCOOL+XiaoWei&family=Noto+Sans+SC:wght@300;500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=ZCOOL+XiaoWei&family=Noto+Sans+SC:wght@300;500&display=swap"
+        rel="stylesheet">
     <style>
         :root {
             --accent-cyan: #22d3ee;
@@ -59,8 +61,13 @@
         }
 
         @keyframes rotateDisc {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
+            from {
+                transform: rotate(0deg);
+            }
+
+            to {
+                transform: rotate(360deg);
+            }
         }
 
         #night-sky {
@@ -94,7 +101,7 @@
             justify-content: center;
             align-items: center;
             gap: 15px;
-            text-shadow: 0 0 10px rgba(255,255,255,0.3);
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
         }
 
         .heart {
@@ -144,7 +151,7 @@
             border-left: 3px solid var(--accent-cyan);
             padding-left: 15px;
             margin-bottom: 30px;
-            background: rgba(255,255,255,0.05);
+            background: rgba(255, 255, 255, 0.05);
             padding: 15px;
             border-radius: 0 15px 15px 0;
         }
@@ -179,16 +186,31 @@
         }
 
         @keyframes pulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.15); }
+
+            0%,
+            100% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.15);
+            }
         }
 
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
     </style>
 </head>
+
 <body>
 
     <div class="music-ctrl" onclick="toggleMusic()">
@@ -201,7 +223,7 @@
     <div class="glass-card">
         <div class="couple-names">
             <span>李小满</span>
-            <span class="heart">💙</span>
+            <span class="heart">❤️</span>
             <span>满小李</span>
         </div>
 
@@ -230,18 +252,30 @@
     </div>
 
     <script>
-        // 1. 计时逻辑 (2025年5月31日 21:50:00)
-        const startTime = new Date(2025, 4, 31, 21, 50, 0).getTime();
+        // 1. 计时起点（东八区：2025-05-31 21:50:00）
+        const startTime = Date.UTC(2025, 4, 31, 13, 50, 0);
+        // 21:50 - 8小时 = 13:50（UTC）
+
         function updateTimer() {
-            const now = new Date().getTime();
+            const now = Date.now(); // 当前时间戳（UTC）
             const diff = now - startTime;
-            document.getElementById('d').innerText = Math.floor(diff / (1000 * 60 * 60 * 24));
-            document.getElementById('h').innerText = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            document.getElementById('m').innerText = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-            document.getElementById('s').innerText = Math.floor((diff % (1000 * 60)) / 1000);
+
+            document.getElementById('d').innerText =
+                Math.floor(diff / (1000 * 60 * 60 * 24));
+
+            document.getElementById('h').innerText =
+                Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+
+            document.getElementById('m').innerText =
+                Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+
+            document.getElementById('s').innerText =
+                Math.floor((diff % (1000 * 60)) / 1000);
         }
+
         setInterval(updateTimer, 1000);
         updateTimer();
+
 
         // 2. 音乐控制
         const audio = document.getElementById('audio');
@@ -267,7 +301,7 @@
             canvas.width = window.innerWidth;
             canvas.height = window.innerHeight;
             stars = [];
-            for(let i=0; i<100; i++) {
+            for (let i = 0; i < 100; i++) {
                 stars.push({
                     x: Math.random() * canvas.width,
                     y: Math.random() * canvas.height,
@@ -287,7 +321,7 @@
                 this.y = Math.random() * canvas.height * 0.5;
                 this.len = Math.random() * 60 + 40;
                 // 基础速度值
-                this.baseSpeed = Math.random() * 200 + 150; 
+                this.baseSpeed = Math.random() * 200 + 150;
                 this.opacity = 0;
                 this.maxOpacity = Math.random() * 0.6 + 0.4;
                 this.phase = 'in'; // in, out
@@ -296,7 +330,7 @@
                 let gradient = ctx.createLinearGradient(this.x, this.y, this.x - this.len, this.y - (this.len * 0.5));
                 gradient.addColorStop(0, `rgba(34, 211, 238, ${this.opacity})`);
                 gradient.addColorStop(1, `rgba(34, 211, 238, 0)`);
-                
+
                 ctx.strokeStyle = gradient;
                 ctx.lineWidth = 1.5;
                 ctx.lineCap = 'round';
@@ -325,7 +359,7 @@
 
         // 减少流星数量，让手机端看起来更清爽
         const meteorCount = window.innerWidth < 500 ? 3 : 5;
-        for(let i=0; i<meteorCount; i++) meteors.push(new Meteor());
+        for (let i = 0; i < meteorCount; i++) meteors.push(new Meteor());
 
         function animate() {
             const now = Date.now();
@@ -333,13 +367,13 @@
             lastTime = now;
 
             ctx.clearRect(0, 0, canvas.width, canvas.height);
-            
+
             // 背景星星微弱闪烁
             stars.forEach(s => {
                 s.opacity += Math.sin(now * 0.001) * 0.005;
                 ctx.fillStyle = `rgba(255,255,255,${Math.abs(s.opacity)})`;
                 ctx.beginPath();
-                ctx.arc(s.x, s.y, s.size, 0, Math.PI*2);
+                ctx.arc(s.x, s.y, s.size, 0, Math.PI * 2);
                 ctx.fill();
             });
 
@@ -377,4 +411,5 @@
         }, 3500);
     </script>
 </body>
+
 </html>

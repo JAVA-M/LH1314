@@ -358,7 +358,8 @@
         }
 
         // 减少流星数量，让手机端看起来更清爽
-        const meteorCount = window.innerWidth < 500 ? 3 : 5;
+        // const meteorCount = window.innerWidth < 500 ? 3 : 5;
+        const meteorCount = window.innerWidth < 500 ? 7 : 9;
         for (let i = 0; i < meteorCount; i++) meteors.push(new Meteor());
 
         function animate() {
@@ -370,7 +371,7 @@
 
             // 背景星星微弱闪烁
             stars.forEach(s => {
-                s.opacity += Math.sin(now * 0.001) * 0.005;
+                s.opacity += Math.sin(now * 0.001) * 0.02; // Math.sin(now * 0.001) * 0.005
                 ctx.fillStyle = `rgba(255,255,255,${Math.abs(s.opacity)})`;
                 ctx.beginPath();
                 ctx.arc(s.x, s.y, s.size, 0, Math.PI * 2);
@@ -392,11 +393,17 @@
 
         // 4. 夸夸内容
         const praises = [
-            "满小李笑起来眼里有星星 ✨",
-            "是全世界最值得被宠爱的宝贝",
+            "你是全世界最可爱的宝 🧸",
             "李小满的余生请多多指教 💍",
-            "你是雾霾蓝里最清澈的那抹亮色",
+            "你是雾霾蓝里最清澈的那抹亮色 💫",
+            "满小李笑起来眼里有星星 ✨",
             "想牵着你的手走过所有四季 🍂",
+            "我的宝往后余生我只要你 🤍",
+            "遇见你之后，我才真正明白什么叫心安 🕊️",
+            "不是所有未来我都期待，但有你的未来我很安心 🌙",
+            "世界再吵，你站在我身边就够了 🤝",
+            "我不太会说爱，但我会一直站在你这边 🧭",
+            "你是我想认真走一辈子的那个人 ❤️",
             "满小李是李小满的小骄傲 💙"
         ];
         let pIndex = 0;
